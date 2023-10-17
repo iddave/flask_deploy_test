@@ -2,10 +2,11 @@ from sentence_transformers import SentenceTransformer
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 import time
-mpnet_path = "C:/Users/Администратор/PycharmProjects/flask_test/model/mpnet"
+import os
+
+current_dir = os.path.dirname(__file__)
+mpnet_path = os.path.join(current_dir, "mpnet")
 model = SentenceTransformer(mpnet_path)
-
-
 # def get_embeddings(sentences):
 #     embeddings = np.array(model.encode(sentences))
 #     # print(f"embeddings: {embeddings}")
