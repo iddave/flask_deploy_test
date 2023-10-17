@@ -1,0 +1,43 @@
+<!doctype html>
+<title>{% block title %}{% endblock %} - Flaskr</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<body>
+<section class="content">
+
+
+    {% block content %}
+        <header>
+            {% block header %}{% endblock %}
+        </header>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class=flashes>
+                    {% for category, message in messages %}
+                        <p class="{{ category }}">{{ message }}</p>
+
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    {% endblock %}
+</section>
+</body>
+<script>
+document.getElementById('question_field').addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault(); // Prevent the default behavior (creating a new line)
+        document.getElementById('id_form_find_question').submit(); // Submit the form
+    }
+});
+</script>
+<script>
+document.querySelectorAll('td').forEach(function(td) {
+    td.addEventListener('click', function() {
+        var range = document.createRange();
+        range.selectNodeContents(this);
+        var selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+    });
+});
+</script>

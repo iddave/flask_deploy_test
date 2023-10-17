@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="form_find_question form">
+            <div class="find_question-header form-header">
+                {% block header %}
+                    <h2>{% block title %} Найти вопрос {% endblock %}</h2>
+                {% endblock %}
+            </div>
+
+            <form action="{{ url_for('test_form.get_question') }}" method="GET" id="id_form_find_question">
+                <div class="input_settings">
+                    <div class="percentage">
+                        <label for="percentage_id">Степень схожести(от и больше):</label>
+                        <select name="percentage" id="percentage_id">
+                            <option value="none" {% if request.form['percentage'] == 'none' %} selected{% endif %}>
+                                default
+                            </option>
+                            <option value="95" {% if request.form['percentage'] == '95' %} selected{% endif %}>95%
+                            </option>
+                            <option value="85" {% if request.form['percentage'] == '85' %} selected{% endif %}>85%
+                            </option>
+                            <option value="75" {% if request.form['percentage'] == '75' %} selected{% endif %}>75%
+                            </option>
+                            <option value="50" {% if request.form['percentage'] == '50' %} selected{% endif %}>50%
+                            </option>
+                            <option value="25" {% if request.form['percentage'] == '25' %} selected{% endif %}>25%
+                            </option>
+                            <option value="5" {% if request.form['percentage'] == '5' %} selected{% endif %}>5%</option>
+                        </select>
+                    </div>
+                    <div class="input_number">
+                        <label for="n_results_id">Кол-во ответов:</label>
+                        <input type="number" id="n_results_id" name="n_results" value="{{ n_result_value }}" min='1'>
+                    </div>
+                </div>
+                <div class="user_question">
+                    <label for="question_field">Вопрос пользователя:</label>
+                    <textarea name="user_question" id="question_field" required>{{ input_question if input_question else '' }}</textarea>
+                    {#                    <input name="user_question" id="question_field" required>#}
+                </div>
+                <div class="find_btn btn" onclick="document.getElementById('find_button').click()">
+                    <input id="find_button" type="submit" value="Найти">
+                </div>
+            </form>
+        </div>
+
+        <div class="form_add_question form">
+            <div class="add_question-header form-header">
+                <h2>Добавить запись</h2>
+            </div>
+            <form action="{{ url_for('test_form.add_question') }}" method="POST">
+                <div class="user_question_db">
+                    <label for="question_field_db">Вопрос пользователя:</label>
+                    <textarea name="user_question_db" id="question_field_db" required>{{ input_question_db if input_question_db else '' }}</textarea>
+                    {#                    <input name="user_question_db" id="question_field_db"#}
+                    {#                           value="{{ input_question if input_question else '' }}" required>#}
+                </div>
+                <div class="answer_db">
+                    <label for="answer_field">Ответ:</label>
+                    <textarea name="answer_db" id="answer_field"></textarea>
+                    {#                    <input type="text" name="answer_db" id="answer_field" value="">#}
+                </div>
+                <div class="answer_link_db">
+                    <label for="answer_link_field">Ссылка:</label>
+                    <textarea name="answer_link_db" id="answer_link_field"></textarea>
+                    {#                    <input type="text" name="answer_link_db" id="answer_link_field">#}
+                </div>
+                <div class="add_btn btn" onclick="document.getElementById('save_button').click()">
+                    <input id="save_button" type="submit" value="Сохранить">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="results">
+        {% if result %}
+            <p>
+                Исходный вопрос: {{ input_question }}
+            </p>
+            <table id="result-table">
+
+                <tr>
+                    <th>Вопрос</th>
+                    <th>Ответ</th>
+                    <th>Ссылка</th>
+                    <th>Степень схожести(%)</th>
+                    <!-- Add more headers as per your DataFrame columns -->
+                </tr>
+
+
+                {% for row in result %}
+                    <tr>
+                        <td>{{ row['Question'] }}</td>
+                        <td>{{ row['Answer'] }}</td>
+                        <td>{{ row['link'] }}</td>
+                        <td style="background-color: {{ row['cosine_similarity']|map_to_color }};">{{ row['cosine_similarity'] }}</td>
+                        <!-- Add more columns as per your DataFrame columns -->
+                    </tr>
+                {% endfor %}
+
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}
+
