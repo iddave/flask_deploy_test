@@ -20,26 +20,21 @@ def get_question():
     user_question = ""
     n_results = 3
     if request.method == 'GET':
-        # user_question = request.form['user_question']
-        # n_results = int(request.form['n_results'])
-        # percentage = request.form['percentage']
         user_question = request.args.get('user_question')
         n_results = int(request.args.get('n_results', 3))
         percentage = request.args.get('percentage')
-        # db = get_db()
         error = None
         # print(f"error: {error}\n")
         if not user_question:
             error = 'Нужно вписать вопрос.'
         if error is None:
-            # execute valid for postgresql?
             print(f"inside if result: {error}\n")
             try:
                 print(f"n = {n_results}")
                 result = get_similar(user_question, percentage, n_results).to_dict(orient='records')
                 print("\n", type(result), "\n")
             except Exception as e:
-                error = f"что-то не так с запросом. Ошибка - {e}"
+                print(f"что-то не так с запросом. Ошибка - {e}")
     session['result'] = result
     session['n_results'] = n_results
     session['user_question'] = user_question
@@ -59,11 +54,10 @@ def add_question():
     if request.method == 'POST':
         ans = request.form['answer_db']
         ans_link = request.form['answer_link_db']
-        db.insert_into_db(user_question, ans,  ans_link)
-
         user_question_db = request.form['user_question_db']
         user_question_db = user_question_db if user_question_db != '' else user_question
         print(f"first qu from session: {session.get('user_question')}, userQ = {user_question}")
+        db.insert_into_db(user_question_db, ans,  ans_link)
     return render_template('test_form/qaform.html',
                            result=result,
                            input_question=user_question,
