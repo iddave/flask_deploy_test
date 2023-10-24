@@ -1,27 +1,24 @@
 import functools
 
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for
+    Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from flaskr import db
+from .db import update_record
 from .similarity import get_similar
 
 
 bp = Blueprint('test_form', __name__, url_prefix='/test')
 
 
-
-
 @bp.route('/qaform', methods = ('GET', 'POST'))
 def get_question():
     result = []
-    user_question = ""
-    n_results = 3
     if request.method == 'GET':
         user_question = request.args.get('user_question')
-        n_results = int(request.args.get('n_results', 3))
+        n_results = int(request.args.get('n_results', 5))
         percentage = request.args.get('percentage')
         error = None
         # print(f"error: {error}\n")
@@ -38,6 +35,7 @@ def get_question():
     session['result'] = result
     session['n_results'] = n_results
     session['user_question'] = user_question
+    print(result, "\n")
     return render_template('test_form/qaform.html',
                            result=result,
                            input_question=user_question,
@@ -48,7 +46,7 @@ def get_question():
 @bp.route('/add_question', methods = ('GET', 'POST'))
 def add_question():
     result = session.get('result', [])
-    n_results = session.get('n_results', 3)
+    n_results = session.get('n_results', 5)
     user_question = session.get('user_question', '')
     user_question_db = ''
     if request.method == 'POST':
@@ -63,3 +61,17 @@ def add_question():
                            input_question=user_question,
                            input_question_db=user_question_db,
                            n_result_value=n_results)
+
+
+@bp.route('/update_data', methods=['POST'])
+def update_data():
+    data = request.get_json()
+    db.update_record(data)
+    return jsonify({'message': 'Data updated successfully'})
+
+@bp.route('/delete_record', methods=['DELETE'])
+def delete_data():
+    data = request.get_json()
+    db.delete_data('QTable', 'QEmbeddings', data)
+    db.delete_data('QTable_temp', 'QEmbeddings_temp', data)
+    return jsonify({'message': 'Data updated successfully'})

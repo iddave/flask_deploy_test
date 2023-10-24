@@ -8,14 +8,14 @@ from model import embeddings as emb
 def get_similar(input_question, percentage, n=3):
     start_time = time.time()
     q_df = db.get_df()
+    input_embedding = emb.get_embeddings(input_question)
     print(f"q_df len = {len(q_df)}\n")
 
     emb_df = db.get_df("QEmbeddings")
     print(f"emb_df len = {len(emb_df)}\n")
     similarity_df = pd.DataFrame()
     # print("TYPE EMBS: ", type(json.loads(emb_df["Embeddings"][1])))
-    similarity_df[['Question', 'Answer', 'link']] = q_df[['Question', 'Answer', 'link']]
-    input_embedding = emb.get_embeddings(input_question)
+    similarity_df[['id', 'Question', 'Answer', 'link']] = q_df[['id', 'Question', 'Answer', 'link']]
     similarity_df["cosine_similarity"] = (emb_df["Embeddings"]
                                           .apply(lambda db_emb: emb.get_emb_score(json.loads(db_emb), input_embedding)))
     similarity_df = similarity_df.sort_values(by='cosine_similarity', ascending=False)

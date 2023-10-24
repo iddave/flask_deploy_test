@@ -81,6 +81,7 @@
             <table id="result-table">
 
                 <tr>
+                    <th>id</th>
                     <th>Вопрос</th>
                     <th>Ответ</th>
                     <th>Ссылка</th>
@@ -91,16 +92,60 @@
 
                 {% for row in result %}
                     <tr>
+                        <td>{{ row['id'] }}</td>
                         <td>{{ row['Question'] }}</td>
                         <td>{{ row['Answer'] }}</td>
                         <td>{{ row['link'] }}</td>
                         <td style="background-color: {{ row['cosine_similarity']|map_to_color }};">{{ row['cosine_similarity'] }}</td>
+                        <td>
+                            <button class="edit-button"
+                                    data-question="{{ row['Question'] }}"
+                                    data-answer="{{ row['Answer'] }}"
+                                    data-link="{{ row['link'] }}"
+                                    data-id="{{ row['id'] }}">
+                                Edit
+                            </button>
+                        </td>
+
                         <!-- Add more columns as per your DataFrame columns -->
                     </tr>
                 {% endfor %}
 
             </table>
         {% endif %}
+    </div>
+
+    <div id="overlay">
+        <div class="form_edit_question form" id="edit_form">
+            <div class="edit_question-header form-header">
+                <h2>Редактировать</h2>
+                <div class="btn-close btn">
+                    <button class="close">X</button>
+                </div>
+            </div>
+            <div>
+                <div class="user_question_edit">
+                    <label for="question_field_edit">Вопрос</label>
+                    <textarea name="edit-question" id="question_field_edit"></textarea>
+                </div>
+                <div class="answer_edit">
+                    <label for="answer_field_edit">Ответ</label>
+                    <textarea name="edit-answer" id="answer_field_edit" cols="30" rows="10"></textarea>
+                </div>
+                <div class="answer_link_edit">
+                    <label for="answer_link_field_edit">Ссылка</label>
+                    <textarea name="edit-link" id="answer_link_field_edit" cols="30" rows="10"></textarea>
+                </div>
+                <div class="edit-btns">
+                    <div class="save-edit btn">
+                        <button id="save-edit_button">Сохранить изменения</button>
+                    </div>
+                    <div class="delete-btn btn" onclick="confirmDelete()">
+                        <button id="delete_button">Удалить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
 

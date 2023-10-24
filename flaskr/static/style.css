@@ -25,7 +25,6 @@ h1, h2, h3 {
     padding: 20px;
     min-width: 40%;
     font-size: 24px;
-    border: 1px solid black;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
     background-color: #fff;
 }
@@ -93,7 +92,7 @@ textarea:focus {
     width: 50px;
 }
 
-.btn input{
+.btn button, .btn input{
     width: 100%;
   align-items: center;
   background-color: #0276FF;
@@ -117,11 +116,11 @@ textarea:focus {
     line-height: 1.15;
 }
 
- .btn input:active {
+ .btn button:active, .btn input:active {
   background-color: #006AE8;
 }
 
- .btn input:hover {
+ .btn button:hover, .btn input:hover {
   background-color: #1C84FF;
 }
 
@@ -151,4 +150,71 @@ textarea:focus {
 .results{
     margin: auto;
     max-width: 90%;
+}
+
+.form_edit_question{
+    min-width: 30%;
+    max-width: 40%;
+    border-radius: 15px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.edit_question-header{
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-close{
+    min-width: 50px;
+    min-height: 50px;
+}
+
+.btn-close:active{
+     background-color: #fa0303;
+}
+
+.btn-close button{
+    background-color: #f11b1b;
+}
+
+.btn-close button:hover{
+    background-color: #d00101;
+}
+
+.edit-btns{
+    display: flex;
+    justify-content: space-between;
+}
+
+.delete-btn{
+    min-width: 20%;
+    margin-left: 7px;
+    padding: 0 5px 5px 0;
+}
+
+.delete-btn button{
+    background-color: #e02727;
+}
+
+.delete-btn button:hover{
+    background-color: #ff0000;
+}
+
+.save-edit{
+    min-width: 80%;
+    padding: 0 5px 5px 0;
+}
+
+#overlay {
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+    display: none;
 }
